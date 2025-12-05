@@ -12,11 +12,8 @@ RUN apt-get update && apt-get install -y \
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install Python dependencies and Turkish spaCy model
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Download Turkish spaCy model
-RUN python -m spacy download tr_core_news_md
 
 # Copy application code
 COPY . .
