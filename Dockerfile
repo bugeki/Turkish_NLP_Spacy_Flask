@@ -1,4 +1,7 @@
-FROM python:3.10-slim
+# Copy application code
+COPY . .
+
+# Make startFROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
@@ -15,13 +18,16 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir https://huggingface.co/turkish-nlp-suite/tr_core_news_md/resolve/main/tr_core_news_md-1.0-py3-none-any.whl
+    pip install --no-cache-dir https://huggingface.co/turkish-nlp-suite/tr_core_news_sm/resolve/main/tr_core_news_sm-1.0-py3-none-any.whl
 
 # Copy application code
 COPY . .
+
+# Test imports before running
+RUN python test_import.py
 
 # Expose port
 EXPOSE 5000
 
 # Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "--log-level", "debug", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--threads", "2", "--timeout", "120", "--log-level", "info", "--max-requests", "100", "--max-requests-jitter", "10", "wsgi:app"]
