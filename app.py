@@ -1,5 +1,5 @@
 from flask import Flask, url_for, request, render_template, jsonify, send_file
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap4
 import json
 
 # NLP Pkgs
@@ -7,9 +7,12 @@ import spacy
 from textblob import TextBlob
 # Turkish NLP
 import os
+import sys
 
 # WordCloud & Matplotlib Packages
 from wordcloud import WordCloud
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
 from io import BytesIO
 import random
@@ -17,15 +20,15 @@ import time
 
 # Initialize App
 app = Flask(__name__)
-Bootstrap(app)
+Bootstrap4(app)
 
 # Load Turkish spaCy model
 try:
     nlp = spacy.load('tr_core_news_md')
-except:
-    # If model not found, download it
-    os.system('python -m spacy download tr_core_news_md')
-    nlp = spacy.load('tr_core_news_md')
+    print("Turkish NLP model loaded successfully", file=sys.stderr)
+except Exception as e:
+    print(f"Error loading Turkish NLP model: {e}", file=sys.stderr)
+    sys.exit(1)
 
 
 @app.route('/')
