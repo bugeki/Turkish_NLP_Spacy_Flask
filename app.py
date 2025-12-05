@@ -1,5 +1,5 @@
 from flask import Flask, url_for, request, render_template, jsonify, send_file
-from flask_bootstrap import Bootstrap4
+from flask_bootstrap import Bootstrap
 import json
 
 # NLP Pkgs
@@ -20,7 +20,7 @@ import time
 
 # Initialize App
 app = Flask(__name__)
-Bootstrap4(app)
+Bootstrap(app)
 
 # Load Turkish spaCy model
 try:
@@ -33,7 +33,22 @@ except Exception as e:
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        # If template doesn't exist, return simple HTML
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head><title>Turkish NLP API</title></head>
+        <body>
+            <h1>Turkish NLP API is Running!</h1>
+            <p>API endpoints available at <a href="/api">/api</a></p>
+            <p>Health check: <a href="/health">/health</a></p>
+            <p>Error loading template: {e}</p>
+        </body>
+        </html>
+        """
 
 
 @app.route('/analyze', methods=['GET', 'POST'])
@@ -70,7 +85,19 @@ def analyze():
 # API ROUTES
 @app.route('/api')
 def basic_api():
-    return render_template('restfulapidocs.html')
+    try:
+        return render_template('restfulapidocs.html')
+    except:
+        return jsonify({
+            "message": "Turkish NLP API",
+            "endpoints": {
+                "/api/tokens/<text>": "Get tokens from text",
+                "/api/lemma/<text>": "Get lemmas from text",
+                "/api/ner/<text>": "Get named entities",
+                "/api/sentiment/<text>": "Get sentiment analysis",
+                "/api/nlpiffy/<text>": "Get detailed NLP analysis"
+            }
+        })
 
 
 # API FOR TOKENS
@@ -170,14 +197,32 @@ def fig(mytext):
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    try:
+        return render_template('about.html')
+    except:
+        return """
+        <!DOCTYPE html>
+        <html>
+        <head><title>About - Turkish NLP API</title></head>
+        <body>
+            <h1>About Turkish NLP API</h1>
+            <p>A Flask-based NLP API for Turkish language processing.</p>
+            <p>Uses spaCy Turkish model (tr_core_news_md) for analysis.</p>
+        </body>
+        </html>
+        """
 
 
 @app.route('/health')
 def health():
-    return jsonify({"status": "healthy"}), 200
+    return jsonify({
+        "status": "healthy",
+        "model": "tr_core_news_md",
+        "model_loaded": nlp is not None
+    }), 200
 
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+    print(f"Starting app on port {port}", file=sys.stderr)
     app.run(host='0.0.0.0', port=port, debug=False)
