@@ -1,5 +1,5 @@
 from flask import Flask, url_for, request, render_template, jsonify, send_file
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap4
 import json
 
 # NLP Pkgs
@@ -20,7 +20,7 @@ import time
 
 # Initialize App
 app = Flask(__name__)
-Bootstrap(app)
+Bootstrap4(app)
 
 # Load Turkish spaCy model
 try:
