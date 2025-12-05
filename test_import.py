@@ -31,7 +31,7 @@ except Exception as e:
 
 try:
     print("4. Testing Turkish model...")
-    nlp = spacy.load('tr_core_news_md')
+    nlp = spacy.load('tr_core_news_sm')
     print("   ✓ Turkish model OK")
 except Exception as e:
     print(f"   ✗ Turkish model FAILED: {e}")
