@@ -12,10 +12,12 @@ RUN apt-get update && apt-get install -y \
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install Python dependencies (without Turkish model yet)
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir https://huggingface.co/turkish-nlp-suite/tr_core_news_sm/resolve/main/tr_core_news_sm-1.0-py3-none-any.whl
+    pip install --no-cache-dir -r requirements.txt
+
+# Download Turkish spaCy model using spacy download
+RUN python -m spacy download tr_core_news_md
 
 # Copy application code
 COPY . .
@@ -26,5 +28,5 @@ RUN python test_import.py || true
 # Expose port
 EXPOSE 5000
 
-# Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--threads", "2", "--timeout", "120", "--log-level", "info", "--max-requests", "100", "--max-requests-jitter", "10", "wsgi:app"]
+# Command to run the application (Railway provides $PORT automatically)
+CMD gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 2 --timeout 120 --log-level info wsgi:app
