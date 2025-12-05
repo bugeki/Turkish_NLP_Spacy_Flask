@@ -16,8 +16,8 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Download Turkish spaCy model using spacy download
-RUN python -m spacy download tr_core_news_md
+# Download Turkish spaCy model - using correct working URL
+RUN pip install https://huggingface.co/turkish-nlp-suite/tr_core_news_md/resolve/main/tr_core_news_md-1.0-py3-none-any.whl
 
 # Copy application code
 COPY . .
