@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Dokümantasyonu - Türkçe NLP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+        .navbar-custom {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .endpoint-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+        .method-badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .try-it-btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="/">🇹🇷 Türkçe NLP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/api">API Dokümantasyonu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Hakkında</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-container">
+            <h1 class="text-primary mb-4">📡 RESTful API Dokümantasyonu</h1>
+            <p class="lead">Türkçe NLP API'sini kullanarak metinlerinizi programatik olarak analiz edin.</p>
+
+            <hr class="my-4">
+
+            <h3 class="text-secondary mb-3">🔗 Temel URL</h3>
+            <div class="code-block">
+                <code>https://turkish-nlp-app-production-451f.up.railway.app</code>
+            </div>
+
+            <hr class="my-4">
+
+            <h3 class="text-secondary mb-3">📋 Endpoint'ler</h3>
+
+            <!-- Health Check -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /health</h5>
+                <p>Uygulama durumunu ve NLP modelinin yüklenip yüklenmediğini kontrol eder.</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /health</code>
+                </div>
+                <strong>Örnek Yanıt:</strong>
+                <div class="code-block mt-2">
+                    <code>{
+  "status": "healthy",
+  "model": "tr_core_news_md",
+  "model_loaded": true
+}</code>
+                </div>
+                <a href="/health" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <!-- Tokens -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /api/tokens/&lt;text&gt;</h5>
+                <p>Metni token'lara (kelimelere) ayırır.</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /api/tokens/Merhaba dünya nasılsın</code>
+                </div>
+                <strong>Örnek Yanıt:</strong>
+                <div class="code-block mt-2">
+                    <code>{
+  "text": "Merhaba dünya nasılsın",
+  "tokens": ["Merhaba", "dünya", "nasılsın"]
+}</code>
+                </div>
+                <a href="/api/tokens/Merhaba dünya nasılsın" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <!-- NER -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /api/ner/&lt;text&gt;</h5>
+                <p>Metindeki isimli varlıkları (kişi, yer, organizasyon vb.) tanır.</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /api/ner/Ankara Türkiye'nin başkentidir</code>
+                </div>
+                <strong>Örnek Yanıt:</strong>
+                <div class="code-block mt-2">
+                    <code>{
+  "text": "Ankara Türkiye'nin başkentidir",
+  "entities": [
+    {"text": "Ankara", "label": "GPE"},
+    {"text": "Türkiye'nin", "label": "GPE"}
+  ]
+}</code>
+                </div>
+                <a href="/api/ner/Ankara Türkiye'nin başkentidir" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <!-- Lemma -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /api/lemma/&lt;text&gt;</h5>
+                <p>Kelimelerin kök hallerini (lemma) bulur.</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /api/lemma/Türkiye'de yaşıyorum</code>
+                </div>
+                <strong>Örnek Yanıt:</strong>
+                <div class="code-block mt-2">
+                    <code>{
+  "text": "Türkiye'de yaşıyorum",
+  "lemmas": [
+    {"token": "Türkiye'de", "lemma": "Türkiye"},
+    {"token": "yaşıyorum", "lemma": "yaşa"}
+  ]
+}</code>
+                </div>
+                <a href="/api/lemma/Türkiye'de yaşıyorum" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <!-- Sentiment -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /api/sentiment/&lt;text&gt;</h5>
+                <p>Metnin duygu analizini yapar (pozitif/negatif).</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /api/sentiment/Bu harika bir gün</code>
+                </div>
+                <strong>Örnek Yanıt:</strong>
+                <div class="code-block mt-2">
+                    <code>{
+  "text": "Bu harika bir gün",
+  "words": ["Bu", "harika", "bir", "gün"],
+  "polarity": 0.8,
+  "subjectivity": 0.9
+}</code>
+                </div>
+                <a href="/api/sentiment/Bu harika bir gün" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <!-- NLPiffy -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /api/nlpiffy/&lt;text&gt;</h5>
+                <p>Detaylı NLP analizi yapar (token, POS, lemma, vb.).</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /api/nlpiffy/Bugün hava çok güzel</code>
+                </div>
+                <strong>Örnek Yanıt:</strong>
+                <div class="code-block mt-2">
+                    <code>{
+  "text": "Bugün hava çok güzel",
+  "analysis": [
+    {
+      "token": "Bugün",
+      "tag": "Noun",
+      "pos": "NOUN",
+      "dependency": "nmod",
+      "lemma": "bugün",
+      "shape": "Xxxxx",
+      "is_alpha": true,
+      "is_stopword": false
+    }
+    ...
+  ]
+}</code>
+                </div>
+                <a href="/api/nlpiffy/Bugün hava çok güzel" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <!-- Word Cloud -->
+            <div class="endpoint-box">
+                <h5><span class="badge bg-success method-badge">GET</span> /fig/&lt;text&gt;</h5>
+                <p>Metinden kelime bulutu görüntüsü oluşturur.</p>
+                <strong>Örnek İstek:</strong>
+                <div class="code-block mt-2">
+                    <code>GET /fig/Türkiye güzel bir ülke Ankara başkent</code>
+                </div>
+                <p class="mt-2"><strong>Yanıt:</strong> PNG formatında kelime bulutu görüntüsü</p>
+                <a href="/fig/Türkiye güzel bir ülke Ankara başkent İstanbul şehir" target="_blank" class="btn btn-sm btn-outline-primary try-it-btn">Dene</a>
+            </div>
+
+            <hr class="my-4">
+
+            <h3 class="text-secondary mb-3">💡 Kullanım Örnekleri</h3>
+
+            <h5 class="mt-4">Python ile Kullanım:</h5>
+            <div class="code-block">
+                <code>import requests
+
+# Tokenizasyon
+response = requests.get('https://turkish-nlp-app-production-451f.up.railway.app/api/tokens/Merhaba dünya')
+print(response.json())
+
+# NER
+response = requests.get('https://turkish-nlp-app-production-451f.up.railway.app/api/ner/Ankara Türkiye başkent')
+print(response.json())</code>
+            </div>
+
+            <h5 class="mt-4">JavaScript ile Kullanım:</h5>
+            <div class="code-block">
+                <code>// Fetch API ile
+fetch('https://turkish-nlp-app-production-451f.up.railway.app/api/sentiment/Bu harika')
+  .then(response => response.json())
+  .then(data => console.log(data));</code>
+            </div>
+
+            <h5 class="mt-4">cURL ile Kullanım:</h5>
+            <div class="code-block">
+                <code>curl "https://turkish-nlp-app-production-451f.up.railway.app/api/tokens/Merhaba dünya"</code>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="/" class="btn btn-primary btn-lg">Web Arayüzünü Kullan</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -20,6 +20,7 @@ import time
 
 # Initialize App
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False  # Enable proper UTF-8 for Turkish characters
 Bootstrap4(app)
 
 # Load Turkish spaCy model
@@ -28,7 +29,12 @@ try:
     print("Turkish NLP model loaded successfully", file=sys.stderr)
 except Exception as e:
     print(f"Error loading Turkish NLP model: {e}", file=sys.stderr)
-    sys.exit(1)
+    # Fallback to blank tokenizer
+    try:
+        nlp = spacy.blank('tr')
+        print("Using blank Turkish tokenizer as fallback", file=sys.stderr)
+    except:
+        sys.exit(1)
 
 
 @app.route('/')
@@ -105,7 +111,9 @@ def basic_api():
 def api_tokens(mytext):
     docx = nlp(mytext)
     mytokens = [token.text for token in docx]
-    return jsonify({"text": mytext, "tokens": mytokens})
+    response = jsonify({"text": mytext, "tokens": mytokens})
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 
 # API FOR LEMMA
@@ -113,7 +121,9 @@ def api_tokens(mytext):
 def api_lemma(mytext):
     docx = nlp(mytext.strip())
     mylemma = [{'token': token.text, 'lemma': token.lemma_} for token in docx]
-    return jsonify({"text": mytext, "lemmas": mylemma})
+    response = jsonify({"text": mytext, "lemmas": mylemma})
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 
 # API FOR NAMED ENTITY
@@ -121,7 +131,9 @@ def api_lemma(mytext):
 def api_ner(mytext):
     docx = nlp(mytext)
     mynamedentities = [{"text": entity.text, "label": entity.label_} for entity in docx.ents]
-    return jsonify({"text": mytext, "entities": mynamedentities})
+    response = jsonify({"text": mytext, "entities": mynamedentities})
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 
 # API FOR NAMED ENTITY (duplicate endpoint)
@@ -129,7 +141,9 @@ def api_ner(mytext):
 def api_entities(mytext):
     docx = nlp(mytext)
     mynamedentities = [{"text": entity.text, "label": entity.label_} for entity in docx.ents]
-    return jsonify({"text": mytext, "entities": mynamedentities})
+    response = jsonify({"text": mytext, "entities": mynamedentities})
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 
 # API FOR SENTIMENT ANALYSIS
@@ -142,7 +156,9 @@ def api_sentiment(mytext):
         "polarity": blob.sentiment.polarity,
         "subjectivity": blob.sentiment.subjectivity
     }
-    return jsonify(mysentiment)
+    response = jsonify(mysentiment)
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 
 # API FOR MORE WORD ANALYSIS
@@ -160,7 +176,9 @@ def nlpifyapi(mytext):
         'is_stopword': token.is_stop
     } for token in docx]
     
-    return jsonify({"text": mytext, "analysis": allData})
+    response = jsonify({"text": mytext, "analysis": allData})
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 
 # IMAGE WORDCLOUD
