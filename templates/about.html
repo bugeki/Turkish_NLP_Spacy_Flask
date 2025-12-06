@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkında - Türkçe NLP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+        .navbar-custom {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .feature-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .tech-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        .workflow-step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+        }
+        .section-title {
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .icon-box {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="/">🇹🇷 Türkçe NLP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api">API Dokümantasyonu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">Hakkında</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-container">
+            <div class="text-center mb-5">
+                <h1 class="text-primary mb-3"><i class="bi bi-info-circle"></i> Türkçe NLP Uygulaması</h1>
+                <p class="lead">Modern doğal dil işleme teknikleriyle Türkçe metinleri analiz eden gelişmiş bir web uygulaması</p>
+            </div>
+
+            <!-- Nasıl Çalışır -->
+            <h2 class="section-title"><i class="bi bi-gear-fill"></i> Nasıl Çalışır?</h2>
+            <p>Bu uygulama, kullanıcıdan aldığı Türkçe metni çeşitli doğal dil işleme (NLP) algoritmalarından geçirerek detaylı bir analiz sunar. İşleyiş adımları:</p>
+
+            <div class="workflow-step">
+                <h5><i class="bi bi-1-circle-fill text-success"></i> Metin Girişi</h5>
+                <p class="mb-0">Kullanıcı web arayüzü veya API üzerinden analiz edilecek Türkçe metni gönderir.</p>
+            </div>
+
+            <div class="workflow-step">
+                <h5><i class="bi bi-2-circle-fill text-success"></i> Ön İşleme</h5>
+                <p class="mb-0">Metin UTF-8 kodlaması ile alınır ve spaCy'nin Türkçe modeline (tr_core_news_md) yüklenir.</p>
+            </div>
+
+            <div class="workflow-step">
+                <h5><i class="bi bi-3-circle-fill text-success"></i> NLP Analizi</h5>
+                <p class="mb-0">spaCy pipeline'ı metni işler: tokenizasyon, POS etiketleme, bağımlılık ayrıştırma ve NER gerçekleştirilir.</p>
+            </div>
+
+            <div class="workflow-step">
+                <h5><i class="bi bi-4-circle-fill text-success"></i> Duygu Analizi</h5>
+                <p class="mb-0">TextBlob kütüphanesi ile metnin duygusal tonu (polarite) ve öznellik derecesi hesaplanır.</p>
+            </div>
+
+            <div class="workflow-step">
+                <h5><i class="bi bi-5-circle-fill text-success"></i> Sonuç Üretimi</h5>
+                <p class="mb-0">Tüm analiz sonuçları JSON formatında yapılandırılır ve kullanıcıya web arayüzü veya API yanıtı olarak sunulur.</p>
+            </div>
+
+            <!-- Özellikler -->
+            <h2 class="section-title"><i class="bi bi-star-fill"></i> Özellikler ve Teknikler</h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-scissors"></i></div>
+                        <h5>Tokenizasyon</h5>
+                        <p><strong>Teknik:</strong> spaCy'nin Türkçe tokenizer'ı</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Metni anlamlı dilsel birimlere (kelimeler, noktalama) ayırır. Türkçe'ye özgü ek yapısını ve bitişik yazımları (örn: "yaptım", "gelecek") doğru şekilde tanır.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-tag-fill"></i></div>
+                        <h5>İsimli Varlık Tanıma (NER)</h5>
+                        <p><strong>Teknik:</strong> spaCy'nin eğitilmiş NER modeli</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Makine öğrenimi tabanlı sınıflandırıcı kullanarak kişi isimleri (PER), yer adları (LOC), organizasyonlar (ORG) ve jeopolitik varlıkları (GPE) tespit eder.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-bookmarks-fill"></i></div>
+                        <h5>POS Etiketleme</h5>
+                        <p><strong>Teknik:</strong> CRF (Conditional Random Fields) tabanlı etiketleyici</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Her kelimenin gramer kategorisini (isim, fiil, sıfat, zarf vb.) ve alt kategorilerini belirler. Türkçe'nin çekimli yapısını analiz eder.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-diagram-3-fill"></i></div>
+                        <h5>Bağımlılık Ayrıştırma</h5>
+                        <p><strong>Teknik:</strong> Transition-based dependency parser</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Cümledeki kelimelerin birbirleriyle olan gramer ilişkilerini (özne, nesne, niteleyici vb.) belirler ve sözdizimi ağacı oluşturur.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-puzzle-fill"></i></div>
+                        <h5>Lemmatizasyon</h5>
+                        <p><strong>Teknik:</strong> Kural tabanlı + sözlük tabanlı lemmatizer</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Kelimeleri kök hallerine (lemma) indirger. "gidiyorum", "gittim", "gideceğim" → "git" gibi çekimleri normalleştirir.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-emoji-smile-fill"></i></div>
+                        <h5>Duygu Analizi</h5>
+                        <p><strong>Teknik:</strong> TextBlob (Pattern kütüphanesi tabanlı)</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Metnin duygusal tonunu -1 (çok negatif) ile +1 (çok pozitif) arasında ve öznellik derecesini 0 (nesnel) ile 1 (öznel) arasında ölçer.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-cloud-fill"></i></div>
+                        <h5>Kelime Bulutu</h5>
+                        <p><strong>Teknik:</strong> WordCloud + Matplotlib</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> Metindeki kelimelerin sıklığına göre görsel bir kelime bulutu oluşturur. Daha sık geçen kelimeler daha büyük gösterilir.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <div class="icon-box"><i class="bi bi-box-arrow-in-right"></i></div>
+                        <h5>Stop Word Tespiti</h5>
+                        <p><strong>Teknik:</strong> spaCy'nin Türkçe stop word listesi</p>
+                        <p class="mb-0"><strong>Açıklama:</strong> "ve", "veya", "bir", "bu" gibi anlamsal değeri düşük yaygın kelimeleri belirler ve filtreleme imkanı sunar.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanılan Teknolojiler -->
+            <h2 class="section-title"><i class="bi bi-code-slash"></i> Kullanılan Teknolojiler ve Kaynaklar</h2>
+
+            <h4 class="text-secondary mt-4 mb-3">Backend Teknolojileri:</h4>
+            <div class="mb-3">
+                <span class="tech-badge"><i class="bi bi-python"></i> Python 3.10</span>
+                <span class="tech-badge"><i class="bi bi-box"></i> Flask 3.0</span>
+                <span class="tech-badge">Gunicorn</span>
+                <span class="tech-badge">spaCy 3.8+</span>
+                <span class="tech-badge">TextBlob</span>
+                <span class="tech-badge">WordCloud</span>
+                <span class="tech-badge">Matplotlib</span>
+            </div>
+            <p><strong>Flask:</strong> Hafif ve esnek Python web framework'ü. RESTful API ve web arayüzü sunmak için kullanılır.</p>
+            <p><strong>Gunicorn:</strong> Production-ready WSGI HTTP sunucusu. Birden fazla worker process ile yüksek performans sağlar.</p>
+
+            <h4 class="text-secondary mt-4 mb-3">NLP Kütüphaneleri:</h4>
+            <div class="mb-3">
+                <span class="tech-badge">spaCy tr_core_news_md</span>
+                <span class="tech-badge">Turkish NLP Suite</span>
+            </div>
+            <p><strong>spaCy:</strong> Endüstriyel seviye NLP kütüphanesi. C++ backend ile yüksek hız sunar.</p>
+            <p><strong>tr_core_news_md:</strong> Turkish NLP Suite tarafından sağlanan orta boyutlu (~100MB) Türkçe dil modeli. UD_Turkish-BOUN ve Turkish News corpus üzerinde eğitilmiştir.</p>
+            <ul>
+                <li><strong>Veri Kaynağı:</strong> Universal Dependencies Turkish BOUN Treebank</li>
+                <li><strong>Model Mimarisi:</strong> Transformer-based token embeddings + CNN</li>
+                <li><strong>Eğitim Verileri:</strong> ~18,000 Türkçe cümle, ~160,000 token</li>
+            </ul>
+
+            <h4 class="text-secondary mt-4 mb-3">Frontend Teknolojileri:</h4>
+            <div class="mb-3">
+                <span class="tech-badge"><i class="bi bi-bootstrap"></i> Bootstrap 5.3</span>
+                <span class="tech-badge">Bootstrap Icons</span>
+                <span class="tech-badge">Responsive Design</span>
+            </div>
+            <p><strong>Bootstrap 5:</strong> Modern, mobil-uyumlu CSS framework. Gradient tasarım ve interaktif bileşenler.</p>
+
+            <h4 class="text-secondary mt-4 mb-3">DevOps & Deployment:</h4>
+            <div class="mb-3">
+                <span class="tech-badge"><i class="bi bi-docker"></i> Docker</span>
+                <span class="tech-badge">Railway</span>
+                <span class="tech-badge">Git</span>
+            </div>
+            <p><strong>Docker:</strong> Konteyner teknolojisi ile tutarlı deployment ortamı sağlar. Multi-stage build ile optimize edilmiş image boyutu.</p>
+            <p><strong>Railway:</strong> Cloud platform, 8GB RAM ile Türkçe NLP modelini sorunsuz çalıştırır. Otomatik HTTPS, continuous deployment.</p>
+
+            <!-- Mimari -->
+            <h2 class="section-title"><i class="bi bi-diagram-2-fill"></i> Sistem Mimarisi</h2>
+            <div class="bg-light p-4 rounded">
+                <pre class="mb-0" style="font-family: monospace; font-size: 0.9rem;">
+┌─────────────┐
+│   Kullanıcı │
+└──────┬──────┘
+       │ HTTP Request
+       ▼
+┌─────────────────────────────┐
+│   Gunicorn WSGI Server      │
+│   (Workers: 1, Threads: 2)  │
+└──────────┬──────────────────┘
+           │
+           ▼
+┌─────────────────────────────┐
+│      Flask Application       │
+│  - Routing                   │
+│  - Request Handling          │
+│  - Response Formatting       │
+└──────────┬──────────────────┘
+           │
+           ▼
+┌─────────────────────────────┐
+│     NLP Processing Layer     │
+│  ┌─────────────────────┐    │
+│  │  spaCy Pipeline     │    │
+│  │  - Tokenizer        │    │
+│  │  - POS Tagger       │    │
+│  │  - Dependency Parse │    │
+│  │  - NER              │    │
+│  │  - Lemmatizer       │    │
+│  └─────────────────────┘    │
+│  ┌─────────────────────┐    │
+│  │  TextBlob           │    │
+│  │  - Sentiment        │    │
+│  └─────────────────────┘    │
+│  ┌─────────────────────┐    │
+│  │  WordCloud          │    │
+│  │  - Visualization    │    │
+│  └─────────────────────┘    │
+└──────────┬──────────────────┘
+           │
+           ▼
+┌─────────────────────────────┐
+│    JSON Response / HTML     │
+└─────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Performans -->
+            <h2 class="section-title"><i class="bi bi-speedometer2"></i> Performans ve Optimizasyonlar</h2>
+            <ul>
+                <li><strong>Model Yükleme:</strong> spaCy modeli uygulama başlatıldığında bir kez yüklenir ve bellekte tutulur (lazy loading değil)</li>
+                <li><strong>Paralel İşleme:</strong> Gunicorn ile thread-based concurrency (1 worker, 2 thread)</li>
+                <li><strong>Hafıza Yönetimi:</strong> Orta boyut model (~100MB) ile doğruluk/performans dengesi</li>
+                <li><strong>Response Caching:</strong> Matplotlib figürleri BytesIO kullanılarak bellekte oluşturulur</li>
+                <li><strong>UTF-8 Encoding:</strong> Türkçe karakter desteği için JSON_AS_ASCII=False yapılandırması</li>
+            </ul>
+
+            <!-- API -->
+            <h2 class="section-title"><i class="bi bi-hdd-network-fill"></i> RESTful API</h2>
+            <p>Uygulama, programatik erişim için tam özellikli bir REST API sunar:</p>
+            <ul>
+                <li><strong>Endpoint'ler:</strong> /api/tokens, /api/ner, /api/lemma, /api/sentiment, /api/nlpiffy</li>
+                <li><strong>Format:</strong> JSON (UTF-8)</li>
+                <li><strong>HTTP Method:</strong> GET</li>
+                <li><strong>Rate Limiting:</strong> Yok (prototip aşaması)</li>
+                <li><strong>Authentication:</strong> Yok (açık API)</li>
+            </ul>
+            <p>Detaylı API dokümantasyonu için <a href="/api" class="text-primary fw-bold"><i class="bi bi-arrow-right-circle"></i> API Sayfası</a></p>
+
+            <!-- Kaynaklar -->
+            <h2 class="section-title"><i class="bi bi-book-fill"></i> Akademik Kaynaklar ve Referanslar</h2>
+            <ul>
+                <li><strong>spaCy:</strong> Honnibal, M., & Montani, I. (2017). spaCy 2: Natural language understanding with Bloom embeddings, convolutional neural networks and incremental parsing.</li>
+                <li><strong>Universal Dependencies:</strong> Nivre, J., et al. (2016). Universal Dependencies v1: A Multilingual Treebank Collection.</li>
+                <li><strong>Turkish BOUN Treebank:</strong> Türk, U., et al. (2019). Resources for Turkish dependency parsing: Introducing the BOUN Treebank.</li>
+                <li><strong>TextBlob:</strong> Loria, S. (2018). textblob Documentation. Release 0.15.2.</li>
+                <li><strong>Turkish NLP Suite:</strong> Hugging Face Model Hub - turkish-nlp-suite/tr_core_news_md</li>
+            </ul>
+
+            <!-- Footer -->
+            <div class="text-center mt-5 pt-4 border-top">
+                <p class="text-muted mb-3">Türkçe doğal dil işleme için açık kaynak teknolojilerle geliştirilmiştir</p>
+                <a href="/" class="btn btn-primary btn-lg me-2"><i class="bi bi-house-fill"></i> Ana Sayfaya Dön</a>
+                <a href="/api" class="btn btn-outline-primary btn-lg"><i class="bi bi-code-square"></i> API'yi Keşfet</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
