@@ -5,6 +5,8 @@ import json
 # NLP Pkgs
 import spacy
 from textblob import TextBlob
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+import torch
 # Turkish NLP
 import os
 import sys
@@ -35,6 +37,18 @@ except Exception as e:
         print("Using blank Turkish tokenizer as fallback", file=sys.stderr)
     except:
         sys.exit(1)
+
+# Load Turkish Sentiment Analysis model from Hugging Face
+try:
+    print("Loading Turkish sentiment model...", file=sys.stderr)
+    sentiment_model_name = "savasy/bert-base-turkish-sentiment-cased"
+    sentiment_tokenizer = AutoTokenizer.from_pretrained(sentiment_model_name)
+    sentiment_model = AutoModelForSequenceClassification.from_pretrained(sentiment_model_name)
+    sentiment_pipeline = pipeline("sentiment-analysis", model=sentiment_model, tokenizer=sentiment_tokenizer)
+    print("Turkish sentiment model loaded successfully", file=sys.stderr)
+except Exception as e:
+    print(f"Warning: Could not load sentiment model: {e}", file=sys.stderr)
+    sentiment_pipeline = None
 
 
 @app.route('/')
@@ -72,8 +86,37 @@ def analyze():
         custom_postagging = [(word.text, word.tag_, word.pos_, word.dep_) for word in docx]
         # NER
         custom_namedentities = [(entity.text, entity.label_) for entity in docx.ents]
-        blob = TextBlob(rawtext)
-        blob_sentiment, blob_subjectivity = blob.sentiment.polarity, blob.sentiment.subjectivity
+        
+        # Turkish Sentiment Analysis with Hugging Face
+        if sentiment_pipeline:
+            try:
+                sentiment_result = sentiment_pipeline(rawtext[:512])[0]  # Limit to 512 chars
+                sentiment_label = sentiment_result['label']
+                sentiment_score = sentiment_result['score']
+                
+                # Map labels to Turkish and polarity
+                label_map = {
+                    'positive': ('Pozitif', sentiment_score),
+                    'negative': ('Negatif', -sentiment_score),
+                    'neutral': ('Nötr', 0.0)
+                }
+                
+                blob_sentiment_label, blob_sentiment = label_map.get(
+                    sentiment_label.lower(), 
+                    ('Nötr', 0.0)
+                )
+                blob_subjectivity = sentiment_score  # Use confidence as subjectivity
+            except Exception as e:
+                print(f"Sentiment analysis error: {e}", file=sys.stderr)
+                # Fallback to TextBlob
+                blob = TextBlob(rawtext)
+                blob_sentiment, blob_subjectivity = blob.sentiment.polarity, blob.sentiment.subjectivity
+                blob_sentiment_label = 'Pozitif' if blob_sentiment > 0 else 'Negatif' if blob_sentiment < 0 else 'Nötr'
+        else:
+            # Fallback to TextBlob
+            blob = TextBlob(rawtext)
+            blob_sentiment, blob_subjectivity = blob.sentiment.polarity, blob.sentiment.subjectivity
+            blob_sentiment_label = 'Pozitif' if blob_sentiment > 0 else 'Negatif' if blob_sentiment < 0 else 'Nötr'
         
         allData = [('"Token":"{}","Tag":"{}","POS":"{}","Dependency":"{}","Lemma":"{}","Shape":"{}","Alpha":"{}","IsStopword":"{}"'.format(
             token.text, token.tag_, token.pos_, token.dep_, token.lemma_, token.shape_, token.is_alpha, token.is_stop)) for token in docx]
@@ -85,7 +128,8 @@ def analyze():
     return render_template('index.html', ctext=rawtext, custom_tokens=custom_tokens, 
                          custom_postagging=custom_postagging, custom_namedentities=custom_namedentities,
                          custom_wordinfo=custom_wordinfo, blob_sentiment=blob_sentiment,
-                         blob_subjectivity=blob_subjectivity, final_time=final_time, result_json=result_json)
+                         blob_subjectivity=blob_subjectivity, blob_sentiment_label=blob_sentiment_label,
+                         final_time=final_time, result_json=result_json)
 
 
 # API ROUTES
@@ -149,13 +193,49 @@ def api_entities(mytext):
 # API FOR SENTIMENT ANALYSIS
 @app.route('/api/sentiment/<string:mytext>', methods=['GET'])
 def api_sentiment(mytext):
-    blob = TextBlob(mytext)
-    mysentiment = {
-        "text": mytext,
-        "words": list(blob.words),
-        "polarity": blob.sentiment.polarity,
-        "subjectivity": blob.sentiment.subjectivity
-    }
+    if sentiment_pipeline:
+        try:
+            sentiment_result = sentiment_pipeline(mytext[:512])[0]
+            sentiment_label = sentiment_result['label']
+            sentiment_score = sentiment_result['score']
+            
+            # Map to polarity scale
+            if sentiment_label.lower() == 'positive':
+                polarity = sentiment_score
+            elif sentiment_label.lower() == 'negative':
+                polarity = -sentiment_score
+            else:
+                polarity = 0.0
+            
+            mysentiment = {
+                "text": mytext,
+                "label": sentiment_label,
+                "label_tr": "Pozitif" if sentiment_label.lower() == 'positive' else "Negatif" if sentiment_label.lower() == 'negative' else "Nötr",
+                "score": sentiment_score,
+                "polarity": polarity,
+                "model": "savasy/bert-base-turkish-sentiment-cased"
+            }
+        except Exception as e:
+            # Fallback to TextBlob
+            blob = TextBlob(mytext)
+            mysentiment = {
+                "text": mytext,
+                "words": list(blob.words),
+                "polarity": blob.sentiment.polarity,
+                "subjectivity": blob.sentiment.subjectivity,
+                "model": "TextBlob (fallback)"
+            }
+    else:
+        # Fallback to TextBlob
+        blob = TextBlob(mytext)
+        mysentiment = {
+            "text": mytext,
+            "words": list(blob.words),
+            "polarity": blob.sentiment.polarity,
+            "subjectivity": blob.sentiment.subjectivity,
+            "model": "TextBlob"
+        }
+    
     response = jsonify(mysentiment)
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
@@ -215,20 +295,7 @@ def fig(mytext):
 
 @app.route('/about')
 def about():
-    try:
-        return render_template('about.html')
-    except:
-        return """
-        <!DOCTYPE html>
-        <html>
-        <head><title>About - Turkish NLP API</title></head>
-        <body>
-            <h1>About Turkish NLP API</h1>
-            <p>A Flask-based NLP API for Turkish language processing.</p>
-            <p>Uses spaCy Turkish model (tr_core_news_md) for analysis.</p>
-        </body>
-        </html>
-        """
+    return render_template('about.html')
 
 
 @app.route('/health')
@@ -236,7 +303,9 @@ def health():
     return jsonify({
         "status": "healthy",
         "model": "tr_core_news_md",
-        "model_loaded": nlp is not None
+        "model_loaded": nlp is not None,
+        "sentiment_model": "savasy/bert-base-turkish-sentiment-cased" if sentiment_pipeline else "TextBlob (fallback)",
+        "sentiment_model_loaded": sentiment_pipeline is not None
     }), 200
 
 
