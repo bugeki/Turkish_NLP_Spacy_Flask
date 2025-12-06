@@ -22,8 +22,11 @@ RUN pip install https://huggingface.co/turkish-nlp-suite/tr_core_news_md/resolve
 # Copy application code
 COPY . .
 
+# Make start script executable
+RUN chmod +x start.sh
+
 # Expose port
 EXPOSE 5000
 
-# Command to run the application (Railway provides $PORT automatically)
-CMD gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 2 --timeout 120 --log-level info --access-logfile - --error-logfile - wsgi:app
+# Command to run the application
+CMD ["./start.sh"]
