@@ -1,7 +1,9 @@
 What's Included:
 📋 Nasıl Çalışır (How It Works)
 
-    Deployed  via railway.app >>> https://turkish-nlp-app-production-451f.up.railway.app/
+    Deployed  via railway.app
+     
+    https://turkish-nlp-app-production-451f.up.railway.app/
 
 5-step workflow from text input to results
 Visual step-by-step process
